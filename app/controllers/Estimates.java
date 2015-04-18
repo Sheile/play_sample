@@ -32,7 +32,7 @@ public class Estimates extends Controller {
     }
 
     List<Estimate> estimates = query.findList();
-    return ok(views.html.Estimates.list.render(searchForm, estimates));
+    return ok(views.html.estimates.list.render(searchForm, estimates));
   }
 }
 
