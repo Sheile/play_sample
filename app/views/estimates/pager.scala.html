@@ -1,0 +1,30 @@
+@(estimates: com.avaje.ebean.Page[Estimate])
+
+<script type="text/javascript">
+$(function() {
+  $('.pagination > .prev:not(.disabled) > a').click(function() {
+    $("input[name='page']").val(@estimates.getPageIndex() - 1);
+    $("form").submit();
+  });
+
+  $('.pagination > .next:not(.disabled) > a').click(function() {
+    $("input[name='page']").val(@estimates.getPageIndex() + 1);
+    $("form").submit();
+  });
+
+  $('.pagination > .jump:not(.active) > a').click(function() {
+    $("input[name='page']").val($(this).text() - 1);
+    $("form").submit();
+  });
+});
+</script>
+
+<ul class="pagination">
+  <li class="prev @if(!estimates.hasPrev()) { disabled }"><a href="#">&lt;&lt; Previous</a></li>
+  @firstPage() = @{ math.max(estimates.getPageIndex() - 2, 0) }
+  @lastPage() = @{ math.min(estimates.getPageIndex() + 2, estimates.getTotalPageCount() - 1) }
+  @for(i <- firstPage() to lastPage()) {
+    <li class="jump @if(estimates.getPageIndex() == i) { active }"><a href="#">@{i + 1}</a></li>
+  }
+  <li class="next @if(!estimates.hasNext()) { disabled }"><a href="#">Next &gt;&gt;</a></li>
+</ul>

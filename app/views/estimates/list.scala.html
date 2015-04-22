@@ -1,4 +1,4 @@
-@(searchForm: DynamicForm)(estimates: List[Estimate])
+@(searchForm: DynamicForm)(estimates: com.avaje.ebean.Page[Estimate])
 
 <!DOCTYPE html>
 
@@ -52,13 +52,14 @@
                     <div class="form-group">
                       <input type="submit" class="form-control" value="検索">
                     </div>
+                    <input type="hidden" name="page" value="@estimates.getPageIndex()">
                   }
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <span class="search-result-header">@estimates.size 件</span>
+            <span class="search-result-header">@estimates.getDisplayXtoYofZ("～", " 件／") 件</span>
             <table class="table table-striped table-bordered">
               <tr>
                 <th>見積番号</th>
@@ -66,7 +67,7 @@
                 <th>件名</th>
                 <th>作成日</th>
               </tr>
-              @for(estimate <- estimates) {
+              @for(estimate <- estimates.getList()) {
                 <tr>
                   <td>@estimate.estimateNumber</td>
                   <td>@estimate.customerName</td>
@@ -75,6 +76,9 @@
                 </tr>
               }
             </table>
+          </div>
+          <div class="row center-block">
+            @pager(estimates)
           </div>
         </div>
       </div>

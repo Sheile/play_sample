@@ -9,11 +9,16 @@ import play.data.*;
 
 import com.avaje.ebean.ExpressionList;
 
+import com.avaje.ebean.Page;
+import com.avaje.ebean.PagingList;
+
 import models.Estimate;
 
 public class Estimates extends Controller {
 
-  public static Result list() {
+  public static Result list(int page) {
+    int pageSize = 8;
+
     DynamicForm searchForm = Form.form().bindFromRequest();
 
     String estimateNumber = searchForm.get("estimateNumber");
@@ -31,7 +36,7 @@ public class Estimates extends Controller {
       query = query.like("subject", "%" + subject + "%");
     }
 
-    List<Estimate> estimates = query.findList();
+    Page<Estimate> estimates = query.findPagingList(pageSize).getPage(page);
     return ok(views.html.estimates.list.render(searchForm, estimates));
   }
 }
